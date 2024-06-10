@@ -19,7 +19,8 @@
       if (cookieDomain) {
         domain = '; expires=' + cookieDomain;
       }
-      document.cookie = name + '=' + (value || '') + domain + expires + '; path=/';
+      // document.cookie = name + '=' + (value || '') + domain + expires + '; path=/';
+      document.cookie = `${name}=${value}; ${expires}; path=/; secure; SameSite=None`;
     }
     document.cookie = "OptanonConnt=yValue37; path=/; secure; SameSite=None";
     window.addEventListener('message', (event) => {
