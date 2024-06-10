@@ -1,0 +1,37 @@
+<html>
+<head>
+  <title>Cookie Consent Synchronizer</title>
+  <script>
+    const consentCookieSynchronizerEventsNamespace = 'consent-cookie-synchronizer';
+
+    function isConsentSynchronizerEvent(event) {
+      return event.data.source === consentCookieSynchronizerEventsNamespace;
+    }
+
+    function setCookie(name, value, days, cookieDomain) {
+      let expires = '';
+      if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = '; expires=' + date.toUTCString();
+      }
+      let domain = '';
+      if (cookieDomain) {
+        domain = '; expires=' + cookieDomain;
+      }
+      document.cookie = name + '=' + (value || '') + domain + expires + '; path=/';
+    }
+
+    window.addEventListener('message', (event) => {
+      if (!isConsentSynchronizerEvent) {
+        return;
+      }
+
+      if (event.data.type === 'cookieUpdate') {
+        console.log('event: ', event.data.payload);
+        setCookie(event.data.payload.cookieName, event.data.payload.cookieValue, 365, event.data.payload.domain);
+      }
+    });
+  </script>
+</head>
+</html>
